@@ -36,7 +36,11 @@ public class PlayerController : MonoBehaviour
 	}
 
 	private void Move() {
-		rigidBody.AddForce(inputVector * speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
+		// Drive the velocity directly so the player has a constant, controllable speed.
+                // (AddForce + VelocityChange used to accumulate force every physics step, which
+                // made the character accelerate up to very high speeds.)
+                Vector3 targetVelocity = inputVector * speed;
+                rigidBody.velocity = Vector3.MoveTowards(rigidBody.velocity, targetVelocity, speed * 4f * Time.fixedDeltaTime);
 	}
 
 	private void RotatePlayer() {
